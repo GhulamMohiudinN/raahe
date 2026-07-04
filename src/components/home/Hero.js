@@ -89,7 +89,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-teal-dark/20" />
       </div>
 
-      {/* <div className="container-lux relative z-10 pb-20 pt-40 sm:pb-28">
+      <div className="container-lux relative z-10 pb-20 pt-40 sm:pb-28">
         <div
           ref={lineRef}
           className="mb-6 h-px w-24 origin-left bg-gold-line"
@@ -125,7 +125,7 @@ export default function Hero() {
             Our Story
           </Link>
         </div>
-      </div> */}
+      </div>
 
       <div className="absolute bottom-8 right-8 z-10 hidden animate-bounce items-center gap-2 text-cream/60 sm:flex">
         <HiArrowDown className="h-4 w-4" />
