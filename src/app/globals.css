@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-jost: "Jost", sans-serif;
+}
+
+* {
+  scroll-behavior: auto;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background-color: #f7f2ea;
+  color: #0e1512;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #014958;
+  color: #f7f2ea;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f7f2ea;
+}
+::-webkit-scrollbar-thumb {
+  background: #c6a46a;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #014958;
+}
+
+@layer utilities {
+  .eyebrow {
+    @apply font-body uppercase tracking-widest2 text-xs text-gold-dark;
+  }
+
+  .container-lux {
+    @apply mx-auto w-full max-w-[1440px] px-6 sm:px-10 lg:px-16;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden bg-teal px-8 py-4 font-body text-xs uppercase tracking-widest2 text-cream transition-colors duration-500 ease-luxury hover:bg-teal-dark;
+  }
+
+  .btn-outline {
+    @apply relative inline-flex items-center justify-center gap-2 border border-teal/40 px-8 py-4 font-body text-xs uppercase tracking-widest2 text-teal transition-colors duration-500 ease-luxury hover:border-teal hover:bg-teal hover:text-cream;
+  }
+
+  .btn-gold {
+    @apply relative inline-flex items-center justify-center gap-2 bg-gold px-8 py-4 font-body text-xs uppercase tracking-widest2 text-teal-dark transition-colors duration-500 ease-luxury hover:bg-gold-dark;
+  }
+
+  .divider-gold {
+    @apply h-px w-24 bg-gold-line;
+  }
+
+  .heading-serif {
+    @apply font-display font-medium leading-[1.05] text-teal-dark;
+  }
+
+  .card-lux {
+    @apply border border-teal/10 bg-cream-light transition-all duration-500 ease-luxury;
+  }
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-teal-dark;
+  }
+}
