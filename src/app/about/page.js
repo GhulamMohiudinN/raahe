@@ -6,7 +6,7 @@ import {
   HiOutlineFlag,
   HiOutlineHeart,
 } from "react-icons/hi2";
-import { heroImage } from "@/data/products";
+import { aboutImage } from "@/data/products";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -30,19 +30,19 @@ const VALUES = [
 
 const TIMELINE = [
   {
-    year: "2019",
+    year: "2023",
     title: "The First Formula",
     text: "A single oud accord, blended in a small home studio, became the seed of what RAAHE would become.",
   },
   {
-    year: "2021",
+    year: "2024",
     title: "Refining the Craft",
     text: "Two years of testing, discarding, and rebuilding — until three fragrances finally felt complete.",
   },
   {
-    year: "2023",
+    year: "2025",
     title: "RAAHE is Born",
-    text: "Noir Oud, Velvet Santal, and Golden Neroli were released as the founding collection.",
+    text: "AXIS, Endless, and 7° were released as the founding collection.",
   },
   {
     year: "Today",
@@ -118,7 +118,7 @@ function StorySection() {
     <section className="container-lux mt-24 grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
       <div ref={imgRef} className="relative aspect-[4/5] w-full overflow-hidden border border-teal/10">
         <Image
-          src={heroImage}
+          src={aboutImage}
           alt="RAAHE Fragrances atelier"
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"

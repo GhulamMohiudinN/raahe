@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { heroImage } from "@/data/products";
+import { ourStoryImage } from "@/data/products";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 if (typeof window !== "undefined") {
@@ -46,7 +46,7 @@ export default function BrandStory() {
           className="relative aspect-[4/5] w-full overflow-hidden border border-gold/20"
         >
           <Image
-            src={heroImage}
+            src={ourStoryImage}
             alt="RAAHE Fragrances brand story"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"

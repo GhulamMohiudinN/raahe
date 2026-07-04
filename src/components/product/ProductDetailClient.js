@@ -74,10 +74,10 @@ export default function ProductDetailClient({ product }) {
               </button>
             </div>
 
-            <div className="mt-10 space-y-2 font-body text-xs text-ink/50">
+            {/* <div className="mt-10 space-y-2 font-body text-xs text-ink/50">
               <p>Free nationwide delivery on orders over PKR 15,000</p>
               <p>Discreet packaging &middot; Insured shipping</p>
-            </div>
+            </div> */}
           </div>
         </div>
 

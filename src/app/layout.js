@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ToasterProvider from "@/components/ui/ToasterProvider";
+import { icon } from "@/data/products";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -29,6 +30,18 @@ export const metadata = {
     "eau de parfum",
     "niche fragrance",
     "oud perfume",
+    "Axis",
+    "Endless",
+    "7 Degree",
+    "perfume house",
+    "exclusive scents",
+    "artisan fragrance",
+    "premium perfume",
+    "signature scent",
+    "luxury fragrance",
+    "perfume collection",
+    "fragrance for men",
+    "fragrance for women",
   ],
   openGraph: {
     title: "RAAHE FRAGRANCES | Luxury Perfumes",
@@ -36,6 +49,9 @@ export const metadata = {
       "An editorial house of luxury perfumery. Discover our signature collection.",
     siteName: "RAAHE FRAGRANCES",
     type: "website",
+  },
+  icons: {
+    icon,
   },
 };
 

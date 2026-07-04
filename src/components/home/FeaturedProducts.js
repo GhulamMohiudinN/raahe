@@ -14,7 +14,7 @@ export default function FeaturedProducts() {
           <SectionHeading
             eyebrow="The Collection"
             title="Three Fragrances, No Compromise"
-            description="Every RAAHE fragrance is composed in small batches, each bottle a complete and deliberate statement."
+            description="Crafted in small batches with carefully selected premium ingredients, every RAAHE fragrance is made without harsh or unnecessary chemicals. Pure quality, refined elegance, and a fragrance experience you can trust."
           />
           <Link
             href="/products"

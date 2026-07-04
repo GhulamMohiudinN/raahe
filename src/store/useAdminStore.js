@@ -3,8 +3,8 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-const ADMIN_EMAIL = "admin@raahe.com";
-const ADMIN_PASSWORD = "raahe123";
+const ADMIN_EMAIL = "raahefragrances@gmail.com";
+const ADMIN_PASSWORD = "raahe@123";
 
 export const useAdminStore = create(
   persist(

@@ -136,17 +136,17 @@ export default function ContactPage() {
               <ContactRow
                 icon={HiOutlineMail}
                 label="Email"
-                value="hello@raahefragrances.com"
+                value="raahefragrances@gmail.com"
               />
               <ContactRow
                 icon={HiOutlinePhone}
                 label="Phone"
-                value="+92 000 0000000"
+                value="+92 336 888 3767"
               />
               <ContactRow
                 icon={HiOutlineLocationMarker}
                 label="Studio"
-                value="Islamabad, Pakistan"
+                value="Lahore, Pakistan"
               />
             </div>
           </div>

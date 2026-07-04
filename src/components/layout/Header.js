@@ -37,15 +37,14 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-luxury ${
-        scrolled
-          ? "bg-cream/95 backdrop-blur-md shadow-[0_1px_0_0_rgba(1,73,88,0.08)]"
-          : "bg-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-luxury ${scrolled
+        ? "bg-cream/95 backdrop-blur-md shadow-[0_1px_0_0_rgba(1,73,88,0.08)]"
+        : "bg-transparent"
+        }`}
     >
       <div className="container-lux flex items-center justify-between py-5">
         <Link href="/" className="group flex flex-col items-start">
-          <span className="font-display text-2xl tracking-[0.15em] text-teal-dark">
+          <span className="font-display text-3xl tracking-[0.15em] text-teal-dark">
             RAAHE
           </span>
           <span className="eyebrow -mt-1 text-[10px] tracking-widest2">
@@ -54,17 +53,19 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-10 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`font-body text-xs uppercase tracking-widest2 transition-colors duration-300 hover:text-teal ${
-                pathname === link.href ? "text-teal" : "text-ink/70"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group relative font-body text-xs uppercase tracking-widest2 transition-colors duration-300 ${isActive ? 'text-teal' : 'text-ink/70 hover:text-teal'}`}
+              >
+                {link.label}
+                <span className={`absolute left-0 -bottom-1 h-[2px] w-full bg-teal transform ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'} origin-left transition-transform duration-300`} />
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-5">
@@ -97,7 +98,7 @@ export default function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-teal-dark/98 md:hidden"
+            className="fixed inset-0 z-[60] bg-black/50 md:hidden"
           >
             <div className="flex items-center justify-between px-6 py-5">
               <span className="font-display text-2xl tracking-[0.15em] text-cream">
@@ -112,21 +113,25 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col items-center gap-8 pt-16">
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.08 }}
-                >
-                  <Link
-                    href={link.href}
-                    className="font-display text-3xl text-cream/90 hover:text-gold"
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
+                  {NAV_LINKS.map((link, i) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 + i * 0.08 }}
+                      >
+                        <Link
+                          href={link.href}
+                          className={`group relative font-display text-3xl text-cream/90 hover:text-gold`}
+                        >
+                          {link.label}
+                          <span className={`absolute left-0 -bottom-2 h-[3px] w-full bg-gold transform ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'} origin-left transition-transform duration-300`} />
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
             </nav>
           </motion.div>
         )}

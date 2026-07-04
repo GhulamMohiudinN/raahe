@@ -9,20 +9,20 @@ import SectionHeading from "@/components/ui/SectionHeading";
 const TESTIMONIALS = [
   {
     quote:
-      "Noir Oud doesn't announce itself, it lingers. Three days later someone at my office still asked what I was wearing.",
-    name: "Ayesha K.",
+      "I was looking for an everyday perfume that feels luxurious without being too strong, and Endless is exactly that. It's fresh, graceful, and perfect for both daytime and evening wear. Highly recommended.",
+    name: "Ayesha Khan",
     role: "Verified Buyer",
   },
   {
     quote:
-      "Velvet Santal is the most complimented scent I own. Subtle at first spray, then it just settles into something warm.",
-    name: "Hamza R.",
+      "I've tried a lot of men's fragrances, but AXIS really stands out. It has a fresh opening with a rich, masculine finish that lasts all day. I received several compliments at work and even after hours, the scent was still noticeable. Definitely one of my favorites.",
+    name: "Hamza Rauf",
     role: "Verified Buyer",
   },
   {
     quote:
-      "Golden Neroli feels like sunlight in a bottle. My go-to for spring mornings and important meetings alike.",
-    name: "Sara M.",
+      "I love how balanced this perfume is. It's neither too masculine nor too feminine, making it perfect for daily wear. The longevity is impressive, and the fragrance stays fresh throughout the day.",
+    name: "Kamran Ali",
     role: "Verified Buyer",
   },
 ];

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { HiOutlineLockClosed, HiOutlineMail } from "react-icons/hi";
+import { HiOutlineLockClosed, HiOutlineMail, HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { useAdminStore } from "@/store/useAdminStore";
 
 export default function AdminLoginPage() {
@@ -13,6 +13,7 @@ export default function AdminLoginPage() {
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) router.replace("/admin/dashboard");
@@ -55,7 +56,7 @@ export default function AdminLoginPage() {
                 value={form.email}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 className="w-full bg-transparent px-3 py-3 font-body text-sm outline-none"
-                placeholder="admin@raahe.com"
+                placeholder="Enter admin email's"
               />
             </div>
           </div>
@@ -65,7 +66,7 @@ export default function AdminLoginPage() {
             <div className="flex items-center border border-teal/20 px-4">
               <HiOutlineLockClosed className="h-4 w-4 text-teal/50" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={form.password}
                 onChange={(e) =>
@@ -74,6 +75,17 @@ export default function AdminLoginPage() {
                 className="w-full bg-transparent px-3 py-3 font-body text-sm outline-none"
                 placeholder="••••••••"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="ml-2 flex items-center justify-center text-teal/50 hover:text-teal focus:outline-none transition-colors"
+              >
+                {showPassword ? (
+                  <HiOutlineEyeOff className="h-4 w-4" />
+                ) : (
+                  <HiOutlineEye className="h-4 w-4" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -87,7 +99,7 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="mt-8 text-center font-body text-[11px] text-ink/40">
-          Demo credentials — admin@raahe.com / raahe123
+          {/* Demo credentials — admin@raahe.com / raahe123 */}
         </p>
       </div>
     </div>

@@ -14,7 +14,7 @@ const FEATURES = [
     icon: HiOutlineSparkles,
     title: "Rare Ingredients",
     description:
-      "Sourced oud, sandalwood, and orange blossom from the world's most respected growers.",
+      " sandalwood, and orange blossom from the world's most respected growers.",
   },
   {
     icon: HiOutlineHandRaised,
