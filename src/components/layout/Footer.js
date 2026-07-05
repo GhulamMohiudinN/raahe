@@ -84,8 +84,16 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="tel:+923368883767" className="hover:text-gold">
-                +92 336 888 3767
+              <a
+                href="https://wa.me/923368883767"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex flex-col hover:text-gold"
+              >
+                <span>+92 336 888 3767</span>
+                <span className="mt-1 text-[11px] uppercase tracking-[0.2em] text-cream/50">
+                  Click to chat on WhatsApp
+                </span>
               </a>
             </li>
           </ul>
