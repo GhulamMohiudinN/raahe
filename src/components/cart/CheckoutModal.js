@@ -16,6 +16,9 @@ export default function CheckoutModal({ open, onClose }) {
   const totalPrice = useCartStore((state) => state.totalPrice());
   const totalItems = useCartStore((state) => state.totalItems());
 
+  const shippingFee = 300;
+  const orderTotal = totalPrice + shippingFee;
+
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -141,9 +144,19 @@ export default function CheckoutModal({ open, onClose }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 flex items-center justify-between border-t border-teal/10 pt-4 font-body text-sm font-semibold">
-                <span className="text-teal-dark">Total</span>
-                <span className="text-teal-dark">{formatPrice(totalPrice)}</span>
+              <div className="mt-4 space-y-2 border-t border-teal/10 pt-4 font-body text-sm">
+                <div className="flex items-center justify-between text-ink/70">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(totalPrice)}</span>
+                </div>
+                <div className="flex items-center justify-between text-ink/70">
+                  <span>Shipping</span>
+                  <span>{formatPrice(shippingFee)}</span>
+                </div>
+                <div className="flex items-center justify-between pt-2 font-semibold text-teal-dark">
+                  <span>Total</span>
+                  <span>{formatPrice(orderTotal)}</span>
+                </div>
               </div>
             </div>
 

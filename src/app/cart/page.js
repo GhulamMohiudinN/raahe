@@ -15,6 +15,9 @@ export default function CartPage() {
   const totalItems = useCartStore((state) => state.totalItems());
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
+  const shippingFee = 300;
+  const orderTotal = totalPrice + shippingFee;
+
   return (
     <div className="min-h-[70vh] bg-cream pb-24 pt-32 sm:pt-36">
       <div className="container-lux">
@@ -67,12 +70,12 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-ink/60">
                   <span>Shipping</span>
-                  <span>Calculated at delivery</span>
+                  <span>{formatPrice(shippingFee)}</span>
                 </div>
               </div>
               <div className="mt-6 flex justify-between font-body text-base font-semibold text-teal-dark">
                 <span>Total</span>
-                <span>{formatPrice(totalPrice)}</span>
+                <span>{formatPrice(orderTotal)}</span>
               </div>
               <button
                 onClick={() => setCheckoutOpen(true)}

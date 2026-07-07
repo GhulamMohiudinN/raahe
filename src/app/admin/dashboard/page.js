@@ -187,8 +187,8 @@ export default function AdminDashboardPage() {
                 value={orders.filter((o) => o.status === "fulfilled").length}
               />
               <StatCard
-                label="Total Items"
-                value={orders.reduce((sum, o) => sum + (o.total_items || 0), 0)}
+                label="Cancelled"
+                value={orders.filter((o) => o.status === "cancelled").length}
               />
             </div>
 
