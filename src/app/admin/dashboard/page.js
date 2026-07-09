@@ -7,6 +7,7 @@ import {
   HiOutlineSearch,
   HiOutlineLogout,
   HiOutlineRefresh,
+  HiOutlineEye,
 } from "react-icons/hi";
 import { useAdminStore } from "@/store/useAdminStore";
 import { fetchOrders, updateOrderStatus } from "@/lib/orders";
@@ -32,6 +33,7 @@ export default function AdminDashboardPage() {
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [messagesError, setMessagesError] = useState(null);
   const [messageQuery, setMessageQuery] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -124,6 +126,14 @@ export default function AdminDashboardPage() {
   const handleLogout = () => {
     logout();
     router.replace("/admin");
+  };
+
+  const openOrderDetails = (order) => {
+    setSelectedOrder(order);
+  };
+
+  const closeOrderDetails = () => {
+    setSelectedOrder(null);
   };
 
   if (!isAuthenticated) return null;
@@ -260,7 +270,8 @@ export default function AdminDashboardPage() {
                     {filteredOrders.map((order) => (
                       <tr
                         key={order.id}
-                        className="border-b border-teal/5 font-body text-sm text-ink/80 hover:bg-cream-dark/20"
+                        className="cursor-pointer border-b border-teal/5 font-body text-sm text-ink/80 hover:bg-cream-dark/20"
+                        onClick={() => openOrderDetails(order)}
                       >
                         <td className="whitespace-nowrap px-5 py-4 text-xs text-ink/50">
                           {order.id?.slice(0, 8)}
@@ -271,7 +282,22 @@ export default function AdminDashboardPage() {
                         <td className="whitespace-nowrap px-5 py-4">{order.email}</td>
                         <td className="whitespace-nowrap px-5 py-4">{order.phone}</td>
                         <td className="max-w-[220px] px-5 py-4">
-                          <span className="line-clamp-2">{order.address}</span>
+                          <div className="space-y-2">
+                            <p className="line-clamp-2 text-xs text-ink/70">
+                              {order.address || "No address provided"}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openOrderDetails(order);
+                              }}
+                              className="flex items-center gap-1 text-xs font-medium text-teal hover:text-teal-dark"
+                            >
+                              <HiOutlineEye className="h-3.5 w-3.5" />
+                              View details
+                            </button>
+                          </div>
                         </td>
                         <td className="max-w-[260px] px-5 py-4">
                           <ProductsCell products={order.products} />
@@ -282,9 +308,11 @@ export default function AdminDashboardPage() {
                         <td className="whitespace-nowrap px-5 py-4">
                           <select
                             value={order.status}
-                            onChange={(e) =>
-                              handleStatusChange(order.id, e.target.value)
-                            }
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              handleStatusChange(order.id, e.target.value);
+                            }}
                             className={`border px-2 py-1 text-xs capitalize outline-none ${statusColor(
                               order.status
                             )}`}
@@ -402,6 +430,87 @@ export default function AdminDashboardPage() {
           </>
         )}
       </div>
+
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6">
+          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-teal/10 bg-cream-light p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="eyebrow text-[10px]">Order Details</p>
+                <h2 className="mt-2 font-display text-2xl text-teal-dark">
+                  {selectedOrder.customer_name}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={closeOrderDetails}
+                className="rounded-full border border-teal/20 px-3 py-1.5 text-sm text-teal hover:bg-teal hover:text-cream"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              <div className="space-y-3 rounded-xl border border-teal/10 bg-cream-dark/30 p-4">
+                <DetailRow label="Order ID" value={selectedOrder.id} />
+                <DetailRow label="Customer" value={selectedOrder.customer_name} />
+                <DetailRow label="Email" value={selectedOrder.email} />
+                <DetailRow label="Phone" value={selectedOrder.phone || "—"} />
+                <DetailRow
+                  label="Status"
+                  value={selectedOrder.status?.toUpperCase() || "PENDING"}
+                />
+                <DetailRow
+                  label="Date"
+                  value={selectedOrder.created_at ? new Date(selectedOrder.created_at).toLocaleString() : "—"}
+                />
+              </div>
+
+              <div className="space-y-3 rounded-xl border border-teal/10 bg-cream-dark/30 p-4">
+                <div>
+                  <p className="font-body text-[10px] uppercase tracking-widest2 text-teal-dark/70">
+                    Address
+                  </p>
+                  <p className="mt-2 whitespace-pre-line font-body text-sm text-ink/80">
+                    {selectedOrder.address || "No address provided"}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-body text-[10px] uppercase tracking-widest2 text-teal-dark/70">
+                    Products
+                  </p>
+                  <div className="mt-2 space-y-2">
+                    {Array.isArray(selectedOrder.products) && selectedOrder.products.length > 0 ? (
+                      selectedOrder.products.map((p, i) => (
+                        <div key={i} className="rounded-lg border border-teal/10 bg-cream-light p-3">
+                          <p className="font-medium text-teal-dark">{p.name}</p>
+                          <p className="mt-1 text-sm text-ink/70">
+                            Quantity: {p.quantity} • Price: {formatPrice(p.price * p.quantity)}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-ink/70">No products listed.</p>
+                    )}
+                  </div>
+                </div>
+                <DetailRow label="Total Items" value={selectedOrder.total_items} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DetailRow({ label, value }) {
+  return (
+    <div>
+      <p className="font-body text-[10px] uppercase tracking-widest2 text-teal-dark/70">
+        {label}
+      </p>
+      <p className="mt-1 font-body text-sm text-ink/80">{value}</p>
     </div>
   );
 }
