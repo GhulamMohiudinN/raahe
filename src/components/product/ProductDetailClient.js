@@ -9,6 +9,7 @@ import QuantitySelector from "@/components/product/QuantitySelector";
 import ProductCard from "@/components/products/ProductCard";
 import { formatPrice, products } from "@/data/products";
 import { useCartStore } from "@/store/useCartStore";
+import ReviewsSection from "@/components/product/ReviewsSection";
 
 export default function ProductDetailClient({ product }) {
   const [quantity, setQuantity] = useState(1);
@@ -92,6 +93,7 @@ export default function ProductDetailClient({ product }) {
             ))}
           </div>
         </div>
+         <ReviewsSection productSlug={product.slug} />
       </div>
     </div>
   );

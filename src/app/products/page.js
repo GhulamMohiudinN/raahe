@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { products } from "@/data/products";
 import ProductCard from "@/components/products/ProductCard";
+import OverallReviews from "@/components/products/OverallReviews";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const NOTE_FILTERS = ["All", "Oud", "Sandalwood", "Citrus", "Floral"];
@@ -101,6 +102,8 @@ export default function ProductsPage() {
             ))}
           </div>
         )}
+
+        <OverallReviews />
       </div>
     </div>
   );

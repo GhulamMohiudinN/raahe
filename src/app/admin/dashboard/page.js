@@ -13,6 +13,8 @@ import { useAdminStore } from "@/store/useAdminStore";
 import { fetchOrders, updateOrderStatus } from "@/lib/orders";
 import { fetchContactMessages } from "@/lib/contactMessages";
 import { formatPrice } from "@/data/products";
+import { fetchAllReviews, deleteReview } from "@/lib/reviews";
+import { HiStar, HiOutlineStar, HiOutlineTrash } from "react-icons/hi";
 
 const STATUS_OPTIONS = ["all", "pending", "processing", "fulfilled", "cancelled"];
 
@@ -35,9 +37,19 @@ export default function AdminDashboardPage() {
   const [messageQuery, setMessageQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewsError, setReviewsError] = useState(null);
+  const [reviewQuery, setReviewQuery] = useState("");
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.replace("/admin");
+    }
+    if (isAuthenticated) {
+      loadOrders();
+      loadMessages();
+      loadReviews();
     }
   }, [isAuthenticated, router]);
 
@@ -73,6 +85,22 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const loadReviews = async () => {
+    setReviewsLoading(true);
+    setReviewsError(null);
+    try {
+      const data = await fetchAllReviews();
+      setReviews(data || []);
+    } catch (err) {
+      setReviewsError(
+        err?.message ||
+        "Could not load reviews. Confirm the reviews table exists in Supabase (see supabase/reviews.sql)."
+      );
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       loadOrders();
@@ -92,6 +120,17 @@ export default function AdminDashboardPage() {
         m.message?.toLowerCase().includes(q)
     );
   }, [messages, messageQuery]);
+
+  const filteredReviews = useMemo(() => {
+    if (!reviewQuery.trim()) return reviews;
+    const q = reviewQuery.trim().toLowerCase();
+    return reviews.filter(
+      (r) =>
+        r.name?.toLowerCase().includes(q) ||
+        r.product_slug?.toLowerCase().includes(q) ||
+        r.comment?.toLowerCase().includes(q)
+    );
+  }, [reviews, reviewQuery]);
 
   const filteredOrders = useMemo(() => {
     let list = orders;
@@ -123,6 +162,17 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleDeleteReview = async (id) => {
+    if (!confirm("Delete this review? This can't be undone.")) return;
+    try {
+      await deleteReview(id);
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+      toast.success("Review deleted");
+    } catch (err) {
+      toast.error(err?.message || "Could not delete review");
+    }
+  };
+
   const handleLogout = () => {
     logout();
     router.replace("/admin");
@@ -145,12 +195,22 @@ export default function AdminDashboardPage() {
           <div>
             <p className="eyebrow mb-1">Admin Console</p>
             <h1 className="heading-serif text-3xl sm:text-4xl">
-              {activeTab === "orders" ? "Orders Dashboard" : "Contact Messages"}
+              {activeTab === "orders"
+                ? "Orders Dashboard"
+                : activeTab === "messages"
+                ? "Contact Messages"
+                : "Product Reviews"}
             </h1>
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => (activeTab === "orders" ? loadOrders() : loadMessages())}
+              onClick={() =>
+                activeTab === "orders"
+                  ? loadOrders()
+                  : activeTab === "messages"
+                  ? loadMessages()
+                  : loadReviews()
+              }
               className="flex items-center gap-2 border border-teal/20 px-4 py-2 font-body text-xs uppercase tracking-widest2 text-teal hover:bg-teal hover:text-cream"
             >
               <HiOutlineRefresh className="h-4 w-4" />
@@ -170,6 +230,7 @@ export default function AdminDashboardPage() {
           {[
             { key: "orders", label: `Orders (${orders.length})` },
             { key: "messages", label: `Messages (${messages.length})` },
+            { key: "reviews", label: `Reviews (${reviews.length})` },
           ].map((tab) => (
             <button
               key={tab.key}
@@ -420,6 +481,112 @@ export default function AdminDashboardPage() {
                           {msg.created_at
                             ? new Date(msg.created_at).toLocaleString()
                             : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </>
+        )}
+
+        {activeTab === "reviews" && (
+          <>
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <StatCard label="Total Reviews" value={reviews.length} />
+              <StatCard
+                label="Average Rating"
+                value={
+                  reviews.length > 0
+                    ? (
+                        reviews.reduce((sum, r) => sum + r.stars, 0) /
+                        reviews.length
+                      ).toFixed(1)
+                    : "—"
+                }
+              />
+            </div>
+
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
+              <div className="relative w-full sm:w-72">
+                <HiOutlineSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-teal/50" />
+                <input
+                  type="text"
+                  value={reviewQuery}
+                  onChange={(e) => setReviewQuery(e.target.value)}
+                  placeholder="Search by name, product, or comment..."
+                  className="w-full border border-teal/20 bg-cream-light py-2.5 pl-11 pr-4 font-body text-sm outline-none focus:border-teal"
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 overflow-x-auto border border-teal/10 bg-cream-light">
+              {reviewsLoading ? (
+                <div className="p-16 text-center font-body text-sm text-ink/50">
+                  Loading reviews...
+                </div>
+              ) : reviewsError ? (
+                <div className="p-16 text-center font-body text-sm text-red-500">
+                  {reviewsError}
+                </div>
+              ) : filteredReviews.length === 0 ? (
+                <div className="p-16 text-center font-body text-sm text-ink/50">
+                  No reviews found.
+                </div>
+              ) : (
+                <table className="w-full min-w-[900px] border-collapse text-left">
+                  <thead>
+                    <tr className="border-b border-teal/10 bg-cream-dark/40">
+                      {["Product", "Name", "Rating", "Comment", "Date", ""].map(
+                        (h) => (
+                          <th
+                            key={h}
+                            className="whitespace-nowrap px-5 py-4 font-body text-[10px] uppercase tracking-widest2 text-teal-dark/70"
+                          >
+                            {h}
+                          </th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredReviews.map((r) => (
+                      <tr
+                        key={r.id}
+                        className="border-b border-teal/5 font-body text-sm text-ink/80 hover:bg-cream-dark/20"
+                      >
+                        <td className="whitespace-nowrap px-5 py-4 font-medium text-teal-dark">
+                          {r.product_slug}
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4">{r.name}</td>
+                        <td className="whitespace-nowrap px-5 py-4">
+                          <div className="flex gap-0.5 text-gold-dark">
+                            {[1, 2, 3, 4, 5].map((n) =>
+                              n <= r.stars ? (
+                                <HiStar key={n} className="h-4 w-4" />
+                              ) : (
+                                <HiOutlineStar key={n} className="h-4 w-4" />
+                              )
+                            )}
+                          </div>
+                        </td>
+                        <td className="max-w-[320px] px-5 py-4">
+                          <span className="line-clamp-2">{r.comment}</span>
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4 text-xs text-ink/50">
+                          {r.created_at
+                            ? new Date(r.created_at).toLocaleString()
+                            : "—"}
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4">
+                          <button
+                            onClick={() => handleDeleteReview(r.id)}
+                            className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700"
+                          >
+                            <HiOutlineTrash className="h-4 w-4" />
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}
